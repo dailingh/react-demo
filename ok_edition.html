@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>todolist</title>
+    <script src="https://cdn.bootcss.com/react/15.4.2/react.min.js"></script>
+    <script src="https://cdn.bootcss.com/react/15.4.2/react-dom.min.js"></script>
+    <script src="https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root">
+
+    </div>
+  <script type="text/babel">
+
+    var Todolist = React.createClass({
+      getInitialState:function() {
+        return{
+          things:[1,2,3]
+        }
+      },
+      // handleChange:function() {
+      //   this.setState({
+      //     allthings:this.props.allthings
+      //   })
+      // },
+      handleSubmit: function (data){
+        this.setState({
+          allthings: this.state.things.push(data)
+        });
+      },
+      handleDelete: function (i) {
+        var allthings = this.state.things;
+        this.setState({
+          allthings: this.state.things.splice(i, 1)
+        });
+      },
+      render:function(){
+        return(
+          <div>
+            <Newidea submitTask={this.handleSubmit}/>
+            <Thingstodo allthings={this.state.things} deleteTask={this.handleDelete}/>
+          </div>
+        )
+      }
+    })
+    var Newidea = React.createClass({
+      // getInitialState:function() {
+      //   return (things);
+      // },
+      handleClick:function(){
+        this.props.submitTask(this.refs.editthing.value);
+        this.refs.editthing.value = '';
+      },
+      render:function(){
+        return(
+          <div>
+            <input type="text" ref="editthing"/>
+            <input type="button" value="add" onClick={this.handleClick}/>
+          </div>
+        )
+      }
+    })
+    var Thingstodo = React.createClass({
+      handleDelete: function (i) {
+        console.log(i);
+        this.props.deleteTask(i);
+      },
+      render:function () {
+        return(
+            <ul>
+            {
+              this.props.allthings.map((item,i) => {
+                return(
+                  <li>
+                    <span>{item}</span>
+                    <input type="button" value="delete" onClick={this.handleDelete.bind(this,i)}/>
+                  </li>
+                )
+              })
+            }
+          </ul>
+        )
+      }
+    })
+    ReactDOM.render(<Todolist />,document.getElementById("root"))
+  </script>
+  </body>
+</html>
